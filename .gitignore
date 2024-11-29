@@ -168,6 +168,7 @@ cython_debug/
 /httpRequests/
 .idea/
 frontend/.idea
+frontend/package-lock.json
 *.xml
 *.iml
 
