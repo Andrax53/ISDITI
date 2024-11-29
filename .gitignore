@@ -166,6 +166,7 @@ cython_debug/
 /workspace.xml
 # Editor-based HTTP Client requests
 /httpRequests/
-.idea
+.idea/
+frontend/.idea
 *.xml
 *.iml
