@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './App.css';
 
 function App() {
   const [file, setFile] = useState(null);
   const [data, setData] = useState('');
   const [encodedImageId, setEncodedImageId] = useState(null);
   const [decodedData, setDecodedData] = useState('');
+  const [fileName, setFileName] = useState('');
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+    setFileName(e.target.files[0]?.name || '');
   };
 
   const handleDataChange = (e) => {
@@ -55,38 +58,62 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>Steganography Tool</h1>
-      <div>
-        <h2>Encode Data into Image</h2>
-        <input type="file" accept=".png,.bmp" onChange={handleFileChange} />
-        <br />
-        <textarea
-          placeholder="Enter data to encode"
-          value={data}
-          onChange={handleDataChange}
-          rows={4}
-          cols={50}
-        />
-        <br />
-        <button onClick={handleEncode}>Encode</button>
+    <div className="app-container">
+      <div className="header">
+        <h1>Steganography Tool</h1>
+        <p className="subtitle">Hide your secret messages in images securely</p>
       </div>
-      <div>
-        <h2>Decode Data from Image</h2>
-        <button onClick={handleDecode}>Decode</button>
+
+      <div className="main-content">
+        <div className="encode-section card">
+          <h2>Encode Data into Image</h2>
+          <div className="file-input-container">
+            <label className="file-input-label">
+              <span className="file-input-text">{fileName || 'Choose an image'}</span>
+              <input 
+                type="file" 
+                accept=".png,.bmp" 
+                onChange={handleFileChange}
+                className="file-input" 
+              />
+              <span className="file-input-button">Browse</span>
+            </label>
+          </div>
+          <div className="textarea-container">
+            <textarea
+              placeholder="Enter your secret message here..."
+              value={data}
+              onChange={handleDataChange}
+              rows={4}
+              className="data-input"
+            />
+          </div>
+          <button onClick={handleEncode} className="action-button">
+            Encode Message
+          </button>
+        </div>
+
+        <div className="decode-section card">
+          <h2>Decode Hidden Message</h2>
+          <button onClick={handleDecode} className="action-button">
+            Decode Message
+          </button>
+          
+          {encodedImageId && (
+            <div className="result-box">
+              <h3>Image ID</h3>
+              <p className="image-id">{encodedImageId}</p>
+            </div>
+          )}
+          
+          {decodedData && (
+            <div className="result-box">
+              <h3>Decoded Message</h3>
+              <p className="decoded-text">{decodedData}</p>
+            </div>
+          )}
+        </div>
       </div>
-      {encodedImageId && (
-        <div>
-          <h3>Encoded Image Information</h3>
-          <p>Image ID: {encodedImageId}</p>
-        </div>
-      )}
-      {decodedData && (
-        <div>
-          <h3>Decoded Data</h3>
-          <p>{decodedData}</p>
-        </div>
-      )}
     </div>
   );
 }
