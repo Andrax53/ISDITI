@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
@@ -8,6 +8,19 @@ function App() {
   const [encodedImageId, setEncodedImageId] = useState(null);
   const [decodedData, setDecodedData] = useState('');
   const [fileName, setFileName] = useState('');
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme || 'light';
+  });
+
+  useEffect(() => {
+    document.body.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+  };
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -59,6 +72,12 @@ function App() {
 
   return (
     <div className="app-container">
+      <div className="theme-toggle">
+        <button onClick={toggleTheme} className="theme-toggle-button">
+          {theme === 'light' ? '🌙' : '☀️'}
+        </button>
+      </div>
+
       <div className="header">
         <h1>Steganography Tool</h1>
         <p className="subtitle">Hide your secret messages in images securely</p>
